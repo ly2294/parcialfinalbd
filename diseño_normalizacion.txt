@@ -1,0 +1,259 @@
+MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+
+Table `mydb`.`Ofertas_Incripciones`
+CREATE TABLE IF NOT EXISTS `mydb`.`Ofertas_Incripciones` (
+  
+`id_OfertasIncripciones` INT NOT NULL,
+  
+PRIMARY KEY (`id_OfertasIncripciones`))
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Alumnos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Alumnos` (
+  
+`id_Alumnos` INT NOT NULL,
+  
+`id_grado` INT NOT NULL,
+  
+`Fecha_Ingreso` DATE NOT NULL,
+  
+PRIMARY KEY (`id_Alumnos`, `id_grado`),
+ 
+ CONSTRAINT `fk_alunmos`
+    
+FOREIGN KEY (`id_Alumnos`)
+    
+REFERENCES `mydb`.`Ofertas_Incripciones` (`id_OfertasIncripciones`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Datos_alumnos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_alumnos` (
+  
+`id_Datosalumnos` INT NOT NULL,
+  
+`Nombres` VARCHAR(45) NOT NULL,
+  
+`Apellidos` VARCHAR(45) NOT NULL,
+  
+`Grado` INT NOT NULL,
+  
+PRIMARY KEY (`id_Datosalumnos`),
+  
+CONSTRAINT `fk_datosalumnos`
+   
+ FOREIGN KEY (`id_Datosalumnos`)
+    
+REFERENCES `mydb`.`Alumnos` (`id_Alumnos`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Estado_Grado`
+CREATE TABLE IF NOT EXISTS `mydb`.`Estado_Grado` (
+  
+`id_EstadoGrado` INT NOT NULL,
+  
+`estado_Grado` ENUM('aprobacion', 'No aprobado') NOT NULL,
+  
+PRIMARY KEY (`id_EstadoGrado`),
+  CONSTRAINT `fk_estadogrado`
+    
+FOREIGN KEY (`id_EstadoGrado`)
+    
+REFERENCES `mydb`.`Alumnos` (`id_Alumnos`)
+   
+ ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Grados`
+CREATE TABLE IF NOT EXISTS `mydb`.`Grados` (
+  
+`id_Grados` INT NOT NULL,
+  
+`Grados` VARCHAR(45) NOT NULL,
+ 
+ PRIMARY KEY (`id_Grados`),
+  
+CONSTRAINT `fk_grados`
+    
+FOREIGN KEY ()
+    
+REFERENCES `mydb`.`Datos_alumnos` ()
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Incripciones`
+CREATE TABLE IF NOT EXISTS `mydb`.`Incripciones` (
+  
+`id_Incripciones` INT NOT NULL,
+  
+`Nomb_Alumno` VARCHAR(45) NOT NULL,
+  
+`Inscripcion` TEXT(200) NOT NULL,
+  
+PRIMARY KEY (`id_Incripciones`),
+  
+CONSTRAINT `fk_inscripciones`
+    
+FOREIGN KEY (`id_Incripciones`)
+    
+REFERENCES `mydb`.`Alumnos` (`id_Alumnos`)
+    
+ON DELETE NO ACTION
+   
+ ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+ Table `mydb`.`datos_ofertas`
+
+CREATE TABLE IF NOT EXISTS `mydb`.`datos_ofertas` (
+  
+`id_datos_ofertas` INT NOT NULL,
+  
+`Fecha_inicio` DATE NOT NULL,
+  
+`Fecha_fin` DATE NOT NULL,
+  
+PRIMARY KEY (`id_datos_ofertas`),
+  
+CONSTRAINT `fk_datos_ofertas`
+    
+FOREIGN KEY ()
+    
+REFERENCES `mydb`.`Ofertas_Incripciones` ()
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Curso_Ofertados`
+CREATE TABLE IF NOT EXISTS `mydb`.`Curso_Ofertados` (
+  
+`idCurso_Ofertados` INT NOT NULL,
+  `
+Cursos_Ofertados` VARCHAR(45) NOT NULL,
+  
+PRIMARY KEY (`idCurso_Ofertados`),
+  
+CONSTRAINT `fk_cursos_ofertados`
+    
+FOREIGN KEY ()
+    
+REFERENCES `mydb`.`Alumnos` ()
+   
+ ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Cursos_ofertados`
+CREATE TABLE IF NOT EXISTS `mydb`.`Cursos_ofertados` (
+  
+`id_Cursos_ofertados` INT NOT NULL,
+  
+`Cursos_ofertados` VARCHAR(45) NOT NULL,
+  
+PRIMARY KEY (`id_Cursos_ofertados`),
+  
+CONSTRAINT `fk_cursos_ofertados`
+    
+FOREIGN KEY (`id_Cursos_ofertados`)
+    
+REFERENCES `mydb`.`Ofertas_Incripciones` (`id_OfertasIncripciones`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+ Table `mydb`.`Asistencia`
+CREATE TABLE IF NOT EXISTS `mydb`.`Asistencia` (
+  
+`id_Asistencia` INT NOT NULL,
+  
+`Asistencia_diaria` VARCHAR(45) NOT NULL,
+  
+PRIMARY KEY (`id_Asistencia`),
+  
+CONSTRAINT `fk_asistencia`
+   
+ FOREIGN KEY (`id_Asistencia`)
+    
+REFERENCES `mydb`.`Datos_alumnos` (`id_Datosalumnos`)
+   
+ ON DELETE NO ACTION
+   
+ ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Faltas_estudiantes`
+CREATE TABLE IF NOT EXISTS `mydb`.`Faltas_estudiantes` (
+  
+`id_Faltasestudiantes` INT NOT NULL,
+  
+`Faltas` ENUM('leves', 'graves') NOT NULL,
+  
+PRIMARY KEY (`id_Faltasestudiantes`),
+  
+CONSTRAINT `fk_faltas_estudiantes`
+    
+FOREIGN KEY (`id_Faltasestudiantes`)
+    
+REFERENCES `mydb`.`Asistencia` (`id_Asistencia`)
+   
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`table1`
+
+CREATE TABLE IF NOT EXISTS `mydb`.`table1` (
+
+)
+
+ENGINE = InnoDB;
+
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
